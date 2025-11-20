@@ -88,7 +88,7 @@ function App() {
           <span></span>
         </button>
 
-        <h1>D&D 5e Character Sheet</h1>
+        <h1>5E Shit</h1>
 
         {activeView === "character" && (
           <button onClick={resetCharacter} className="btn-reset">
