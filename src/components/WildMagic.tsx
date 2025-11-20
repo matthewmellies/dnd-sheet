@@ -1,121 +1,123 @@
 import React, { useState } from "react";
 
-// Wild Magic Surge table from D&D 5e Player's Handbook
-const WILD_MAGIC_SURGES: { [key: string]: string } = {
-  "01-02":
-    "Roll on this table at the start of each of your turns for the next minute, ignoring this result on subsequent rolls.",
-  "03-04":
-    "For the next minute, you can see any invisible creature if you have line of sight to it.",
-  "05-06":
-    "A modron chosen and controlled by the DM appears in an unoccupied space within 5 feet of you, then disappears 1 minute later.",
-  "07-08": "You cast Fireball as a 3rd-level spell centered on yourself.",
-  "09-10": "You cast Magic Missile as a 5th-level spell.",
-  "11-12":
-    "Roll a d10. Your height changes by a number of inches equal to the roll. If the roll is odd, you shrink. If the roll is even, you grow.",
-  "13-14": "You cast Confusion centered on yourself.",
-  "15-16":
-    "For the next minute, you regain 5 hit points at the start of each of your turns.",
-  "17-18":
-    "You grow a long beard made of feathers that remains until you sneeze, at which point the feathers explode out from your face.",
-  "19-20": "You cast Grease centered on yourself.",
-  "21-22":
-    "Creatures have disadvantage on saving throws against the next spell you cast in the next minute that involves a saving throw.",
-  "23-24":
-    "Your skin turns a vibrant shade of blue. A Remove Curse spell can end this effect.",
-  "25-26":
-    "An eye appears on your forehead for the next minute. During that time, you have advantage on Wisdom (Perception) checks that rely on sight.",
-  "27-28":
-    "For the next minute, all your spells with a casting time of 1 action have a casting time of 1 bonus action.",
-  "29-30":
-    "You teleport up to 60 feet to an unoccupied space of your choice that you can see.",
-  "31-32":
-    "You are transported to the Astral Plane until the end of your next turn, after which time you return to the space you previously occupied or the nearest unoccupied space if that space is occupied.",
-  "33-34":
-    "Maximize the damage of the next damaging spell you cast within the next minute.",
-  "35-36":
-    "Roll a d10. Your age changes by a number of years equal to the roll. If the roll is odd, you get younger (minimum 1 year old). If the roll is even, you get older.",
-  "37-38":
-    "1d6 flumphs controlled by the DM appear in unoccupied spaces within 60 feet of you and are frightened of you. They vanish after 1 minute.",
-  "39-40": "You regain 2d10 hit points.",
-  "41-42":
-    "You turn into a potted plant until the start of your next turn. While a plant, you are incapacitated and have vulnerability to all damage. If you drop to 0 hit points, your pot breaks, and your form reverts.",
-  "43-44":
-    "For the next minute, you can teleport up to 20 feet as a bonus action on each of your turns.",
-  "45-46": "You cast Levitate on yourself.",
-  "47-48":
-    "A unicorn controlled by the DM appears in a space within 5 feet of you, then disappears 1 minute later.",
-  "49-50":
-    "You can't speak for the next minute. Whenever you try, pink bubbles float out of your mouth.",
-  "51-52":
-    "A spectral shield hovers near you for the next minute, granting you a +2 bonus to AC and immunity to Magic Missile.",
-  "53-54":
-    "You are immune to being intoxicated by alcohol for the next 5d6 days.",
-  "55-56": "Your hair falls out but grows back within 24 hours.",
-  "57-58":
-    "For the next minute, any flammable object you touch that isn't being worn or carried by another creature bursts into flame.",
-  "59-60": "You regain your lowest-level expended spell slot.",
-  "61-62": "For the next minute, you must shout when you speak.",
-  "63-64": "You cast Fog Cloud centered on yourself.",
-  "65-66":
-    "Up to three creatures you choose within 30 feet of you take 4d10 lightning damage.",
-  "67-68":
-    "You are frightened by the nearest creature until the end of your next turn.",
-  "69-70":
-    "Each creature within 30 feet of you becomes invisible for the next minute. The invisibility ends on a creature when it attacks or casts a spell.",
-  "71-72": "You gain resistance to all damage for the next minute.",
-  "73-74":
-    "A random creature within 60 feet of you becomes poisoned for 1d4 hours.",
-  "75-76":
-    "You glow with bright light in a 30-foot radius for the next minute. Any creature that ends its turn within 5 feet of you is blinded until the end of its next turn.",
-  "77-78":
-    "You cast Polymorph on yourself. If you fail the saving throw, you turn into a sheep for the spell's duration.",
-  "79-80":
-    "Illusory butterflies and flower petals flutter in the air within 10 feet of you for the next minute.",
-  "81-82": "You can take one additional action immediately.",
-  "83-84":
-    "Each creature within 30 feet of you takes 1d10 necrotic damage. You regain hit points equal to the sum of the necrotic damage dealt.",
-  "85-86": "You cast Mirror Image.",
-  "87-88": "You cast Fly on a random creature within 60 feet of you.",
-  "89-90":
-    "You become invisible for the next minute. During that time, other creatures can't hear you. The invisibility ends if you attack or cast a spell.",
-  "91-92":
-    "If you die within the next minute, you immediately come back to life as if by the Reincarnate spell.",
-  "93-94": "Your size increases by one size category for the next minute.",
-  "95-96":
-    "You and all creatures within 30 feet of you gain vulnerability to piercing damage for the next minute.",
-  "97-98": "You are surrounded by faint, ethereal music for the next minute.",
-  "99-00": "You regain all expended sorcery points.",
-};
+// Wild Magic Surge table - Custom homebrew version
+const WILD_MAGIC_SURGES: string[] = [
+  "For 1 minute, you emanate Wild Magic aura around you in a 30-foot radius. All creatures casting spells of 1st level or higher while in the radius must roll a d20 for Wild Magic.",
+  "A small bird delivers an envelope to you. The envelope contains a letter from an anonymous fan and a chocolate bar.",
+  "You sneeze every time someone thinks about you within the next hour.",
+  "For the next 24 hours, you have a strong feeling that someone is watching you. You gain a 1d4 bonus to passive Perception for the duration of the effect.",
+  "A fashionable hat appears on your head. A trail of shimmery glitter remains after the hat and anyone who is wearing it.",
+  'A small cupcake with a large burning candle appears in front of you. Attached to the cupcake, there is a note that says "Make a wish".',
+  "A miniature cloud appears above your head. There is constant drizzle coming from the cloud. The cloud constantly follows you around and disappears after 16d hours.",
+  "A 5 by 30 feet table appears in front of you, stuffed to the brim with your favorite food.",
+  "You will be the main character of the next book you read.",
+  "For the next hour, small combustible objects ignite if you look at them for longer than 1 round.",
+  'For the next 24 hours, every time you enter a room, fanfare is heard around you and an illusory herald announces your arrival, addressing you as "lord".',
+  "A small lead figurine of you appears in the air and falls to the ground, in a pose you had at the moment of casting a spell. Despite the size, it weighs as much as you.",
+  "All doors and windows in a 120 foot radius slam shut.",
+  "For 1 hour, you can telepathically open simple nonmagical locks that you can see by concentrating on them for 1 minute.",
+  "The ground within a 60-foot radius becomes covered in eggshells.",
+  "You are unable to lie and withhold information for the next hour.",
+  "You cast Tongues on yourself.",
+  "For the next 24 hours, you involuntarily dance when you stand still.",
+  "For the next 24 hours, any non-magical mirror you look into shatters.",
+  "You cast Unseen Servant.",
+  "An egg appears on the ground next to you. If the egg breaks, a chicken will appear in its place. If the chicken's hitpoints drop to zero, it will turn into an egg with the properties identical to the original one.",
+  "A tiny fairy appears next to you. She immediately starts saying nasty things about you. The fairy is intangible and disappears after 10 minutes.",
+  "The next person to physically touch you (or hit you with a weapon) will take 1d6 lightning damage.",
+  "For the next 24 hours, you cast no shadow and do not appear in reflective surfaces.",
+  "For 1 hour, items you try to pick up or use slip out of your hands.",
+  "For the next minute, you can Disengage as a bonus action.",
+  "For 1 hour, objects around you whisper back everything you say.",
+  "Your voice booms like thunder for 1 minute. If you start speaking, all creatures within 15 feet that can hear you must make a Constitution saving throw DC 13. Creatures take 1d6 thunder damage on a failed save and half as much on a successful one.",
+  "A sweet old lady appears in front of you, kisses you on the forehead and disappears. You regain 1 hitpoint.",
+  "For the next 24 hours, steam comes out of your ears when you are angry.",
+  "A festive cracker appears right next to your ear and explodes with a loud bang. You become deafened for 1 round.",
+  "You cast Jim's Magic Missile. The spell's level is determined by a 1d4 roll.",
+  "All fire sources within 60 feet of you flare up and deal 1d4 fire damage to all creatures within 5 feet of them.",
+  "Posters randomly pasted on vertical surfaces appear within a radius of 1d10 miles. The posters show your face with an offensive nickname written below.",
+  "For 1 hour, you can sense the presence of non-friendly creatures in a 120-foot radius.",
+  "You become charmed by the first creature that speaks to you. Charm effect disappears after 1d4 hours.",
+  "All creatures within 60 feet of you know your exact location for 1 minute.",
+  "For the next minute, any creature that attacks you is randomly teleported into a free space 15 feet away from it.",
+  "You get a random strong obsession, such as setting everything on fire, attacking people, collecting all the flowers, etc. The obsession disappears after 1 hour.",
+  "For 1 minute, if you come within 5 feet of any wall, ghostly hands will emerge from it and try to grapple you.",
+  "For 1 minute, you automatically succeed on Constitution saving throws.",
+  "A blooming rose meadow 20 feet in diameter grows beneath your feet. The meadow is considered difficult terrain. If an enemy attacks you while standing on the meadow, it attacks with spiked stems, dealing 1d6 piercing damage. Meadow hit bonus is +0.",
+  "You teleport to one of your relatives for 1d4 rounds.",
+  "You begin to brightly glow for 1d4 hours, attracting the attention of all creatures within 60 feet of you.",
+  "The scent of lavender permeates all around you. For 1 minute, any creature (including you) within 15 feet that drops to 0 hitpoints is automatically stabilized.",
+  "All creatures with whom you have interacted in the last 24 hours are instilled with a memory of having a wonderful tea party together with you.",
+  "You feel a strong blow to the head, losing 1d4 points of Intelligence until the next sunrise.",
+  "You cast Cure Wounds on yourself. The spell's level is determined by a 1d4 roll.",
+  "For 24 hours, you attract small animals nearby and have advantage on Animal Handling checks.",
+  "Your magical focus turns into a potato for 1d4 rounds. If you do not have a focus, you yourself turn into a potato.",
+  "Your next successful attack is guaranteed to be a crit.",
+  "A sheep appears in every doorway within 120 feet of you.",
+  "For the next round, all creatures within 30 feet of you try to get as close to you as possible at all costs.",
+  "You lose the need to breathe for 1 hour.",
+  "For an hour, you can read the minds of all creatures within a 30-foot radius, but at the same time, all creatures can read your own thoughts within the same radius.",
+  "A locked cage made of random metal materializes around you. The cage has the size that is sufficient to fit you.",
+  "The next merchant you buy from will be charmed by your manners and will give you a discount.",
+  "For 1 minute, all Medium and Small humanoid corpses within 60 feet of you rise from the dead as zombies or skeletons (depending on the condition of the corpse). Reanimated corpses are passive and wander aimlessly unless attacked. When killed again, the corpse turns to dust.",
+  "Your magical items begin to fill your mind with forbidden secrets. Make an Intelligence saving throw (DC equals to your saving throw DC). On a failed save, you take 1d6 psychic damage for each magic item you have, and half on a successful one.",
+  "For 1 minute, all creatures within 30 feet of you gain vulnerability to one of the damage types determined by a d6 roll. 1 - Acid, 2 - Cold, 3 - Fire, 4 - Force, 5 - Electricity, 6 - Poison.",
+  "All creatures that have a rope within 60 feet of you make a DC 15 Dexterity saving throw. On a failed save, the rope entangles its owner.",
+  "You cast Faerie Fire centered on yourself.",
+  "Your skin becomes hard as stone. You gain resistance to all damage types for 1 minute. The effect ends if you move.",
+  "You cast Phantasmal Force on all creatures within 30 feet. The illusion produced by the spell is the same for everyone and is chosen by the DM.",
+  "Your purse explodes, sending your coins flying in all directions in a 30-foot radius. Each creature in the radius must make a DC 13 Dexterity saving throw. On a failed save, the target takes 1d6 bludgeoning damage for every 100 coins in the purse (up to 8d6, remaining coins fall to the floor next to you), and half on a success. If the purse has less than 100 coins in total, it does not explode. Instead, 2d10 gold coins and a fancy calling card advertising a get-rich-quick scheme appear inside.",
+  "For the next minute, a ghostly shield hovers near you, granting a +2 bonus to AC and immunity to magic missile.",
+  "You cast Hypnotic Pattern centered on yourself.",
+  "You cast Polymorph on yourself. If you fail the saving throw, you are transformed into a sheep for the duration of the spell.",
+  "All creatures and objects within 60 feet begin levitating for 1d4 rounds.",
+  "A tree 1d10 feet high grows under your feet. The tree has 1d4 sparkling fruits that trigger a Wild Magic Surge when eaten.",
+  "All pastries, sweets and cakes within a 1 mile radius are teleported to you.",
+  "You regain the spell slot you used to cast the spell that triggered the Wild Magic Surge.",
+  "For a moment, you gain a bit of control over the magic surge. Roll three times on this table, re-rolling if you get this effect again. From the rolled effects, choose one.",
+  "All non-flying creatures in the radius of 60 feet gain a flying speed of 30 feet for 1d4 rounds, while those who fly lose it.",
+  "The weather within a 10 mile radius starts to change. Roll d6 to determine the weather effect: 1 - Scorching heat, 2 - Snowstorm, 3 - Pouring rain and thunderstorm, 4 - Intense wind, 5 - Dense fog, 6 - Solar eclipse. The weather takes up to 1 hour to take full effect. After 24 hours the weather returns to normal.",
+  "All liquid water within 120 feet of you instantly evaporates.",
+  "A small tattoo of a four-leaf clover appears on your neck. Roll 2d20. For the next 24 hours, you can use one of the numbers rolled instead of any d20 roll. Each number rolled can only be used once.",
+  "If you take a Short Rest within the next 24 hours, you can spend one hit die to restore Sorcery Points instead of health.",
+  "You cast Rary's Telepathic Bond, targeting the 8 creatures closest to you within range. Target consent is not required.",
+  "If you try to sleep within the next 24 hours, a tiny shadow creature will appear next to you and keep you awake. As soon as you wake up, the creature will disappear and reappear when you fall asleep again.",
+  "Each successive Wild Magic roll that does not result in a Wild Magic Surge increases the difficulty of the next Wild Magic roll by 1. The Wild Magic Surge ends this effect and resets the difficulty of the roll.",
+  "Walls within a 120-foot radius that are less than 5 feet thick become intangible and translucent for 1 minute. Intangible walls continue to support what is above them. If any creature remains inside the wall at the end of this effect, it takes 1d12 bludgeoning damage and is pushed into the nearest free space.",
+  "The damage of your next successful attack will be equal to the maximum values of the dice instead of their roll.",
+  "You regain 1d6 spent spell slots, starting with the lowest ones.",
+  "You cast Divine weapon [Spiritual weapon]. The weapon has the form of a cast-iron statue of your mother in the middle of spanking you as a kid.",
+  "For the next minute 1 minute, if your hit points drop to 0, make a DC 15 Constitution saving throw. On a success, you do not fall unconscious and regain 1 hitpoint. With each success, the difficulty of the saving throw increases by 2.",
+  "You involuntarily let out a loud scream. Each creature (except you) within a 30-foot radius must make a Constitution saving throw (DC equals to your your saving throw DC). On a failed save, non-flying creatures are knocked prone and flying creatures fall to the ground.",
+  "A kobold wearing a top hat and a monocle appears next to you. The kobold is friendly to you, very smart and polite, his initiative is equal to yours. As a bonus action, you can give him a simple task, such as walking to a specified location, hiding, picking up an item, and so on. If you are concentrating on a spell, as a bonus action you can ask the kobold to begin concentrating on it for you if the kobold is not concentrating on anything already. If the kobold dies, the spell he was concentrating on ends. The kobold refuses to perform actions directly aimed at causing harm to anyone, explaining that he is a pacifist. The kobold disappears after 10 minutes, leaving a note asking for forgiveness for his sudden departure.",
+  "You move to another plane of existence until the end of your next turn, after which you return to the space previously occupied, or the nearest free space. Roll a d4 to find out which plane you will be transported to. 1 - Astral Plane, 2 - Feywild, 3 - Ethereal Plane, 4 - Shadowfell.",
+  "For the next minute, when making an attack, roll an additional d20. On a 1, a shield forms around the target, reflecting the attack back at you.",
+  "You and your equipment change your size for 1d4 rounds. Roll a d6 to determine your size. 1 - Tiny, 2 - Small, 3 - Medium, 4 - Large, 5 - Huge, 6 - Gargantuan. If the space you are currently in is unable to accommodate you, you expand to the maximum possible size.",
+  "Make an Intelligence saving throw DC 15. On a failed save, you unattune from all magic items you are attuned to.",
+  "All magic items within a 240-foot radius become unstable and emit a dim, iridescent glow for 1 hour. When an unstable item's magical effect is activated, the owner must roll a d20 for Wild Magic.",
+  "For the next minute, if anyone (including you) attempts to cast a spell of 1st level or higher within 30 feet of you, you automatically use your reaction to cast a Counterspell on them.",
+  "For the next 1d4 days, you will be waking up at a random location within a 1 mile radius of where you fell asleep.",
+  "You cast Antimagic Field centered on yourself. The field of antimagic remains at the point where it was created. The spell ends in 1d6 rounds.",
+  "Next spell you cast will be cast 1 level higher than the slot you used. Cantrips are not affected by this effect.",
+  "You can immediately take one additional action.",
+  "You transform into a red dragon wyrmling for 1 round. In this form, you do not have access to your class abilities and equipment.",
+  "Roll on this table at the start of each of your turns for the next minute, ignoring this result on subsequent rolls.",
+];
 
 export const WildMagic: React.FC = () => {
   const [currentSurge, setCurrentSurge] = useState<{
-    roll: string;
+    number: number;
     text: string;
   } | null>(null);
 
   const rollWildMagic = () => {
-    // Roll d100 (1-100)
-    const roll = Math.floor(Math.random() * 100) + 1;
-
-    // Format as 01-100 string
-    const rollString = roll.toString().padStart(2, "0");
-
-    // Find the matching range in the table
-    let matchedEffect = "";
-    let matchedRange = "";
-
-    for (const [range, effect] of Object.entries(WILD_MAGIC_SURGES)) {
-      const [min, max] = range.split("-").map(Number);
-      if (roll >= min && roll <= max) {
-        matchedEffect = effect;
-        matchedRange = range;
-        break;
-      }
-    }
+    // Randomly select an effect from the array
+    const randomIndex = Math.floor(Math.random() * WILD_MAGIC_SURGES.length);
+    const effect = WILD_MAGIC_SURGES[randomIndex];
 
     setCurrentSurge({
-      roll: `${rollString} (${matchedRange})`,
-      text: matchedEffect,
+      number: randomIndex + 1, // Display as 1-indexed
+      text: effect,
     });
   };
 
@@ -142,7 +144,7 @@ export const WildMagic: React.FC = () => {
           <div className="surge-header">
             <div>
               <h3>✨ Wild Magic Surge!</h3>
-              <p className="surge-roll">d100 Roll: {currentSurge.roll}</p>
+              <p className="surge-roll">Effect #{currentSurge.number}</p>
             </div>
             <button onClick={clearSurge} className="btn-clear-surge">
               ✕
@@ -156,13 +158,14 @@ export const WildMagic: React.FC = () => {
         <h3>📖 About Wild Magic</h3>
         <p>
           When a Wild Magic Sorcerer casts a leveled spell, the DM can have them
-          roll a d20. If they roll a 1, they must roll on the Wild Magic Surge
-          table (d100) to determine what random magical effect occurs.
+          roll a d20. If they roll a 1, they must roll on a Wild Magic Surge
+          table to determine what random magical effect occurs.
         </p>
         <p>
-          This table contains {Object.keys(WILD_MAGIC_SURGES).length} different
-          effects from the Player's Handbook, ranging from beneficial to
-          catastrophic!
+          <strong>Note:</strong> This is a custom homebrew table with{" "}
+          {WILD_MAGIC_SURGES.length} unique effects, not the standard Player's
+          Handbook version. Effects range from whimsical and beneficial to
+          chaotic and catastrophic!
         </p>
       </div>
     </div>
