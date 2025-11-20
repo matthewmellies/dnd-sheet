@@ -1,0 +1,256 @@
+import { useState, useEffect } from "react";
+import type { Character } from "./types/character";
+import { useLocalStorage } from "./hooks/useLocalStorage";
+import {
+  createNewCharacter,
+  calculateProficiencyBonus,
+} from "./utils/characterHelpers";
+import { CharacterInfo } from "./components/CharacterInfo";
+import { AbilityScoresComponent } from "./components/AbilityScores";
+import { Skills } from "./components/Skills";
+import { CombatStats } from "./components/CombatStats";
+import { Spells } from "./components/Spells";
+import { EquipmentComponent } from "./components/Equipment";
+import { DiceRoller } from "./components/DiceRoller";
+import "./App.css";
+
+function App() {
+  const [character, setCharacter] = useLocalStorage<Character>(
+    "dnd-character",
+    createNewCharacter()
+  );
+
+  const [activeView, setActiveView] = useState<"character" | "dice">(
+    "character"
+  );
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const [activeTab, setActiveTab] = useState<"stats" | "spells" | "equipment">(
+    "stats"
+  );
+
+  const [expandedSections, setExpandedSections] = useState<Set<string>>(
+    new Set(["combat", "abilities", "skills"])
+  );
+
+  const toggleSection = (section: string) => {
+    setExpandedSections((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(section)) {
+        newSet.delete(section);
+      } else {
+        newSet.add(section);
+      }
+      return newSet;
+    });
+  };
+
+  // Update proficiency bonus when level changes
+  useEffect(() => {
+    const newProficiency = calculateProficiencyBonus(character.level);
+    if (newProficiency !== character.proficiencyBonus) {
+      setCharacter({
+        ...character,
+        proficiencyBonus: newProficiency,
+      });
+    }
+  }, [character.level]); // Only depend on level
+
+  const updateCharacter = (updates: Partial<Character>) => {
+    setCharacter((prevCharacter) => ({
+      ...prevCharacter,
+      ...updates,
+    }));
+  };
+
+  const resetCharacter = () => {
+    if (
+      confirm(
+        "Are you sure you want to reset your character? This cannot be undone."
+      )
+    ) {
+      setCharacter(createNewCharacter());
+    }
+  };
+
+  return (
+    <div className="app">
+      <header className="app-header">
+        <button
+          className="hamburger-menu"
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label="Menu"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <h1>D&D 5e Character Sheet</h1>
+
+        {activeView === "character" && (
+          <button onClick={resetCharacter} className="btn-reset">
+            New Character
+          </button>
+        )}
+      </header>
+
+      {menuOpen && (
+        <>
+          <div className="menu-overlay" onClick={() => setMenuOpen(false)} />
+          <nav className="side-menu">
+            <button
+              className={`menu-item ${
+                activeView === "character" ? "active" : ""
+              }`}
+              onClick={() => {
+                setActiveView("character");
+                setMenuOpen(false);
+              }}
+            >
+              Character Sheet
+            </button>
+            <button
+              className={`menu-item ${activeView === "dice" ? "active" : ""}`}
+              onClick={() => {
+                setActiveView("dice");
+                setMenuOpen(false);
+              }}
+            >
+              Dice Roller
+            </button>
+          </nav>
+        </>
+      )}
+
+      <main className="app-main">
+        {activeView === "character" ? (
+          <>
+            <CharacterInfo character={character} onUpdate={updateCharacter} />
+
+            <nav className="tab-nav">
+              <button
+                className={activeTab === "stats" ? "active" : ""}
+                onClick={() => setActiveTab("stats")}
+              >
+                Stats & Skills
+              </button>
+              <button
+                className={activeTab === "spells" ? "active" : ""}
+                onClick={() => setActiveTab("spells")}
+              >
+                Spells
+              </button>
+              <button
+                className={activeTab === "equipment" ? "active" : ""}
+                onClick={() => setActiveTab("equipment")}
+              >
+                Equipment
+              </button>
+            </nav>
+
+            <div className="tab-content">
+              {activeTab === "stats" && (
+                <>
+                  <section className="accordion-section">
+                    <div
+                      className="accordion-header"
+                      onClick={() => toggleSection("combat")}
+                    >
+                      <h2>
+                        <span className="expand-icon">
+                          {expandedSections.has("combat") ? "▼" : "▶"}
+                        </span>
+                        Combat Stats
+                      </h2>
+                    </div>
+                    {expandedSections.has("combat") && (
+                      <div className="accordion-content">
+                        <CombatStats
+                          character={character}
+                          onUpdate={updateCharacter}
+                        />
+                      </div>
+                    )}
+                  </section>
+
+                  <section className="accordion-section">
+                    <div
+                      className="accordion-header"
+                      onClick={() => toggleSection("abilities")}
+                    >
+                      <h2>
+                        <span className="expand-icon">
+                          {expandedSections.has("abilities") ? "▼" : "▶"}
+                        </span>
+                        Ability Scores
+                      </h2>
+                    </div>
+                    {expandedSections.has("abilities") && (
+                      <div className="accordion-content">
+                        <AbilityScoresComponent
+                          character={character}
+                          onUpdate={updateCharacter}
+                        />
+                      </div>
+                    )}
+                  </section>
+
+                  <section className="accordion-section">
+                    <div
+                      className="accordion-header"
+                      onClick={() => toggleSection("skills")}
+                    >
+                      <h2>
+                        <span className="expand-icon">
+                          {expandedSections.has("skills") ? "▼" : "▶"}
+                        </span>
+                        Skills
+                      </h2>
+                    </div>
+                    {expandedSections.has("skills") && (
+                      <div className="accordion-content">
+                        <Skills
+                          character={character}
+                          onUpdate={updateCharacter}
+                        />
+                      </div>
+                    )}
+                  </section>
+                </>
+              )}
+
+              {activeTab === "spells" && (
+                <Spells character={character} onUpdate={updateCharacter} />
+              )}
+
+              {activeTab === "equipment" && (
+                <EquipmentComponent
+                  character={character}
+                  onUpdate={updateCharacter}
+                />
+              )}
+            </div>
+          </>
+        ) : (
+          <DiceRoller />
+        )}
+      </main>
+
+      <footer className="app-footer">
+        <p>
+          Data powered by{" "}
+          <a
+            href="https://www.dnd5eapi.co/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            D&D 5e API
+          </a>
+        </p>
+      </footer>
+    </div>
+  );
+}
+
+export default App;

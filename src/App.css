@@ -1,0 +1,1338 @@
+/* Mobile-First D&D Character Sheet Styles */
+
+:root {
+  --primary-color: #8b0000;
+  --secondary-color: #d4af37;
+  --background: #1a1a1a;
+  --card-background: #2d2d2d;
+  --text-primary: #e5e5e5;
+  --text-secondary: #b0b0b0;
+  --border-color: #444;
+  --success-color: #4caf50;
+  --warning-color: #ff9800;
+  --danger-color: #f44336;
+  --input-background: #383838;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--text-primary);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.app-header {
+  background: linear-gradient(135deg, var(--primary-color), #5a0000);
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--secondary-color);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.btn-reset {
+  background-color: var(--secondary-color);
+  color: var(--background);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+
+.btn-reset:hover {
+  background-color: #c5a028;
+}
+
+/* Hamburger Menu */
+.hamburger-menu {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 102;
+}
+
+.hamburger-menu span {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background-color: var(--secondary-color);
+  transition: all 0.3s;
+  border-radius: 2px;
+}
+
+.hamburger-menu:hover span {
+  background-color: #c5a028;
+}
+
+/* Side Menu */
+.menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.side-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 250px;
+  background-color: var(--card-background);
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
+  z-index: 101;
+  padding-top: 4rem;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.menu-item {
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  padding: 1rem 1.5rem;
+  text-align: left;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border-left: 3px solid transparent;
+}
+
+.menu-item:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.menu-item.active {
+  background-color: rgba(139, 0, 0, 0.3);
+  border-left-color: var(--secondary-color);
+  color: var(--secondary-color);
+  font-weight: bold;
+}
+
+/* Main Content */
+.app-main {
+  flex: 1;
+  padding: 1rem;
+}
+
+/* Character Info */
+.character-info {
+  background-color: var(--card-background);
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.info-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.info-field {
+  flex: 1;
+  min-width: 120px;
+  display: flex;
+  flex-direction: column;
+}
+
+.info-field label {
+  font-size: 0.75rem;
+  color: var(--secondary-color);
+  margin-bottom: 0.25rem;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.info-field input {
+  background-color: var(--input-background);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.info-field input:focus {
+  outline: none;
+  border-color: var(--secondary-color);
+}
+
+/* Tab Navigation */
+.tab-nav {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.tab-nav button {
+  flex: 1;
+  min-width: 100px;
+  background-color: var(--card-background);
+  border: 2px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 0.75rem;
+  border-radius: 8px 8px 0 0;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.tab-nav button.active {
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  border-color: var(--primary-color);
+  transform: translateY(-2px);
+}
+
+.tab-nav button:hover:not(.active) {
+  background-color: #3a3a3a;
+}
+
+/* Tab Content */
+.tab-content {
+  background-color: var(--card-background);
+  padding: 1rem;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Accordion Sections */
+.accordion-section {
+  margin-bottom: 1rem;
+  background-color: var(--input-background);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+.accordion-header {
+  cursor: pointer;
+  user-select: none;
+  padding: 1rem;
+  transition: background-color 0.2s;
+}
+
+.accordion-header:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.accordion-header h2 {
+  margin: 0;
+  color: var(--secondary-color);
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border: none;
+  padding: 0;
+}
+
+.accordion-header .expand-icon {
+  color: var(--secondary-color);
+  font-size: 0.875rem;
+  transition: transform 0.2s;
+  width: 16px;
+  flex-shrink: 0;
+}
+
+.accordion-content {
+  padding: 0 1rem 1rem 1rem;
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Combat Stats */
+.combat-stats {
+  margin-bottom: 0;
+}
+
+.combat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.stat-box {
+  background-color: var(--input-background);
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  border: 2px solid var(--border-color);
+}
+
+.stat-box label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--secondary-color);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.stat-box input {
+  background-color: var(--card-background);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  width: 100%;
+}
+
+.stat-display {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+/* Hit Points */
+.hit-points {
+  background-color: var(--input-background);
+  padding: 1rem;
+  border-radius: 8px;
+  border: 2px solid var(--danger-color);
+}
+
+.hit-points h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: var(--danger-color);
+  font-size: 1.2rem;
+}
+
+.hp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 1rem;
+}
+
+.hp-field label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.hp-field input {
+  background-color: var(--card-background);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+  width: 100%;
+}
+
+/* Ability Scores */
+.ability-scores {
+  margin-bottom: 0;
+}
+
+.abilities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+}
+
+.ability-card {
+  background-color: var(--input-background);
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  border: 2px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.ability-label {
+  font-size: 0.875rem;
+  color: var(--secondary-color);
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.ability-modifier {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.ability-score {
+  background-color: var(--card-background);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+  width: 100%;
+}
+
+.saving-throw {
+  border-top: 1px solid var(--border-color);
+  padding-top: 0.5rem;
+}
+
+.saving-throw label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.save-modifier {
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.save-label {
+  color: var(--text-secondary);
+}
+
+/* Skills */
+.skills {
+  margin-bottom: 0;
+}
+
+.skills-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.5rem;
+}
+
+.skill-item {
+  background-color: var(--input-background);
+  padding: 0.75rem;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+}
+
+.skill-item.proficient {
+  border-color: var(--success-color);
+  background-color: rgba(76, 175, 80, 0.1);
+}
+
+.skill-item label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.skill-item input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.skill-modifier {
+  font-weight: bold;
+  color: var(--text-primary);
+  min-width: 30px;
+  text-align: center;
+}
+
+.skill-name {
+  flex: 1;
+  color: var(--text-primary);
+}
+
+.skill-ability {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+}
+
+/* Spells */
+.spells {
+  margin-bottom: 1.5rem;
+}
+
+.spells-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.spells-header h2 {
+  margin: 0;
+  border: none;
+  padding: 0;
+}
+
+.btn-add {
+  background-color: var(--success-color);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+
+.btn-add:hover {
+  background-color: #45a049;
+}
+
+/* Spell Slots */
+.spell-slots {
+  background-color: var(--input-background);
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  border: 2px solid var(--border-color);
+}
+
+.spell-slots-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.spell-slots-header h3 {
+  margin: 0;
+  color: var(--secondary-color);
+  font-size: 1.2rem;
+}
+
+.btn-long-rest {
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background-color 0.2s;
+}
+
+.btn-long-rest:hover {
+  background-color: #6a0000;
+}
+
+.spell-slots-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.spell-slot-level {
+  background-color: var(--card-background);
+  padding: 0.75rem;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+}
+
+.slot-level-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.slot-level-label {
+  font-weight: bold;
+  color: var(--secondary-color);
+  font-size: 1rem;
+}
+
+.slot-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.slot-count {
+  font-weight: bold;
+  color: var(--text-primary);
+  min-width: 40px;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.btn-slot-adjust {
+  background-color: var(--input-background);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  line-height: 1;
+  transition: background-color 0.2s;
+}
+
+.btn-slot-adjust:hover {
+  background-color: var(--border-color);
+}
+
+.slot-bubbles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.slot-bubble {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  transition: transform 0.2s;
+  color: var(--text-primary);
+}
+
+.slot-bubble:hover {
+  transform: scale(1.2);
+}
+
+.slot-bubble.available {
+  color: var(--secondary-color);
+}
+
+.slot-bubble.used {
+  color: var(--text-secondary);
+  opacity: 0.5;
+}
+
+.spell-slots-empty {
+  text-align: center;
+  color: var(--text-secondary);
+  padding: 1rem;
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+/* Spell Search */
+.spell-search {
+  background-color: var(--input-background);
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.search-input-group {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.search-input-group input {
+  flex: 1;
+  background-color: var(--card-background);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.75rem;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.search-input-group button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.search-input-group button:disabled {
+  background-color: #555;
+  cursor: not-allowed;
+}
+
+.search-results {
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+}
+
+.search-result-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--card-background);
+}
+
+.search-result-item:last-child {
+  border-bottom: none;
+}
+
+.search-result-item button {
+  background-color: var(--success-color);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+/* Spell List */
+.spells-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Spell Level Groups */
+.spell-level-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.spell-level-header {
+  color: var(--secondary-color);
+  font-size: 1.3rem;
+  margin: 0;
+  padding: 0.5rem 0;
+  border-bottom: 2px solid var(--primary-color);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.spell-count {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-weight: normal;
+}
+
+/* Spell Cards with Accordion */
+.spell-card {
+  background-color: var(--input-background);
+  border-radius: 8px;
+  border: 2px solid var(--border-color);
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+.spell-card.prepared {
+  border-color: var(--secondary-color);
+  background-color: rgba(212, 175, 55, 0.05);
+}
+
+.spell-card.collapsed {
+  padding: 0;
+}
+
+.spell-card.expanded {
+  padding: 0;
+}
+
+.spell-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s;
+}
+
+.spell-header:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.spell-card.collapsed .spell-header {
+  margin-bottom: 0;
+}
+
+.spell-card.expanded .spell-header {
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 0;
+}
+
+.spell-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.expand-icon {
+  color: var(--secondary-color);
+  font-size: 0.75rem;
+  flex-shrink: 0;
+  width: 16px;
+  transition: transform 0.2s;
+}
+
+.spell-title h4 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.spell-school {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: normal;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.spell-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.btn-prepare {
+  background: none;
+  border: none;
+  font-size: 1.3rem;
+  cursor: pointer;
+  color: var(--secondary-color);
+  padding: 0;
+  line-height: 1;
+  transition: transform 0.2s;
+}
+
+.btn-prepare:hover {
+  transform: scale(1.2);
+}
+
+.btn-remove {
+  background-color: var(--danger-color);
+  color: white;
+  border: none;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: bold;
+  line-height: 1;
+  transition: background-color 0.2s;
+}
+
+.btn-remove:hover {
+  background-color: #d32f2f;
+}
+
+.spell-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.spell-info {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.spell-info strong {
+  color: var(--secondary-color);
+}
+
+.spell-description {
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--border-color);
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+.spell-description p {
+  margin: 0.5rem 0;
+}
+
+.spell-description p:first-child {
+  margin-top: 0;
+}
+
+.spell-description p:last-child {
+  margin-bottom: 0;
+}
+
+/* Equipment */
+.equipment {
+  margin-bottom: 1.5rem;
+}
+
+.equipment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.equipment-header h2 {
+  margin: 0;
+  border: none;
+  padding: 0;
+}
+
+.equipment-search {
+  background-color: var(--input-background);
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.equipment-list {
+  overflow-x: auto;
+}
+
+.equipment-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--input-background);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.equipment-table th {
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  padding: 0.75rem;
+  text-align: left;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+}
+
+.equipment-table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.equipment-table tr:last-child td {
+  border-bottom: none;
+}
+
+.qty-input {
+  background-color: var(--card-background);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.25rem;
+  border-radius: 4px;
+  width: 60px;
+  text-align: center;
+}
+
+/* Empty States */
+.empty-message {
+  text-align: center;
+  color: var(--text-secondary);
+  padding: 2rem;
+  font-style: italic;
+}
+
+/* Error Message */
+.error {
+  background-color: rgba(244, 67, 54, 0.1);
+  border: 1px solid var(--danger-color);
+  color: var(--danger-color);
+  padding: 0.75rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+/* Footer */
+.app-footer {
+  background-color: var(--card-background);
+  padding: 1rem;
+  text-align: center;
+  border-top: 2px solid var(--border-color);
+  margin-top: 2rem;
+}
+
+.app-footer p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.app-footer a {
+  color: var(--secondary-color);
+  text-decoration: none;
+}
+
+.app-footer a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive Design for Larger Screens */
+@media (min-width: 768px) {
+  .app-header h1 {
+    font-size: 2rem;
+  }
+
+  .app-main {
+    padding: 2rem;
+  }
+
+  .info-field {
+    min-width: 150px;
+  }
+
+  .abilities-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  .combat-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .hp-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Touch-Friendly Adjustments */
+@media (hover: none) and (pointer: coarse) {
+  button,
+  input[type="checkbox"],
+  .skill-item label {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .tab-nav button {
+    padding: 1rem;
+  }
+}
+
+/* Dice Roller */
+.dice-roller {
+  padding: 1rem 0;
+}
+
+.dice-roller h2 {
+  color: var(--secondary-color);
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  border-bottom: 2px solid var(--primary-color);
+  padding-bottom: 0.5rem;
+}
+
+.dice-controls {
+  background-color: var(--input-background);
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  border: 2px solid var(--border-color);
+}
+
+.modifier-control {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.modifier-control label {
+  color: var(--secondary-color);
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.modifier-input {
+  background-color: var(--card-background);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  width: 100px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.dice-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.dice-btn {
+  background: linear-gradient(135deg, var(--primary-color), #5a0000);
+  color: var(--secondary-color);
+  border: 2px solid var(--secondary-color);
+  padding: 1rem;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.dice-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  background: linear-gradient(135deg, #6a0000, var(--primary-color));
+}
+
+.dice-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.custom-roll {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.custom-roll-input {
+  flex: 1;
+  background-color: var(--card-background);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.75rem;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.custom-roll-input::placeholder {
+  color: var(--text-secondary);
+}
+
+.btn-roll-custom {
+  background-color: var(--success-color);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.2s;
+}
+
+.btn-roll-custom:hover {
+  background-color: #45a049;
+}
+
+/* Dice Results */
+.dice-results {
+  background-color: var(--input-background);
+  padding: 1rem;
+  border-radius: 8px;
+  border: 2px solid var(--border-color);
+}
+
+.results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.results-header h3 {
+  margin: 0;
+  color: var(--secondary-color);
+  font-size: 1.2rem;
+}
+
+.btn-clear {
+  background-color: var(--danger-color);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-clear:hover {
+  background-color: #d32f2f;
+}
+
+.results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.result-item {
+  background-color: var(--card-background);
+  padding: 1rem;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  animation: slideDown 0.2s ease-out;
+}
+
+.result-type {
+  color: var(--secondary-color);
+  font-weight: bold;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.result-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.result-rolls {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.result-modifier {
+  color: var(--text-primary);
+  font-weight: bold;
+}
+
+.roll-critical-high {
+  color: #4caf50;
+  font-weight: bold;
+  text-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+.roll-critical-low {
+  color: #f44336;
+  font-weight: bold;
+  text-shadow: 0 0 5px rgba(244, 67, 54, 0.5);
+}
+
+.result-total {
+  color: var(--text-primary);
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+@media (min-width: 768px) {
+  .dice-buttons {
+    grid-template-columns: repeat(7, 1fr);
+  }
+}
