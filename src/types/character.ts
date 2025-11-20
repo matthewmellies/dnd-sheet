@@ -194,6 +194,7 @@ export interface Note {
 export interface CharacterData {
   character: Character;
   notes: Note[];
+  mischiefTracker?: number;
 }
 
 export interface CharactersStore {

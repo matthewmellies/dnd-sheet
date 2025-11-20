@@ -94,6 +94,22 @@ export const useCharacterManager = () => {
     return data ? data.notes : [];
   };
 
+  const getMischiefTracker = (): number => {
+    const data = getActiveCharacterData();
+    return data?.mischiefTracker ?? 0;
+  };
+
+  const updateMischiefTracker = (value: number) => {
+    setStore((prev) => ({
+      ...prev,
+      characters: prev.characters.map((cd) =>
+        cd.character.id === prev.activeCharacterId
+          ? { ...cd, mischiefTracker: value }
+          : cd
+      ),
+    }));
+  };
+
   const updateCharacter = (updates: Partial<Character>) => {
     setStore((prev) => ({
       ...prev,
@@ -182,10 +198,12 @@ export const useCharacterManager = () => {
   return {
     character: getActiveCharacter(),
     notes: getActiveNotes(),
+    mischiefTracker: getMischiefTracker(),
     allCharacters: getAllCharacters(),
     updateCharacter,
     setCharacter,
     updateNotes,
+    updateMischiefTracker,
     createCharacter,
     switchCharacter,
     deleteCharacter,

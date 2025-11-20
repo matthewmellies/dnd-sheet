@@ -13,13 +13,21 @@ const NOTE_COLORS = [
 interface NotesProps {
   notes: Note[];
   onUpdateNotes: (notes: Note[]) => void;
+  mischiefTracker: number;
+  onUpdateMischiefTracker: (value: number) => void;
 }
 
-export const Notes: React.FC<NotesProps> = ({ notes, onUpdateNotes }) => {
+export const Notes: React.FC<NotesProps> = ({
+  notes,
+  onUpdateNotes,
+  mischiefTracker,
+  onUpdateMischiefTracker,
+}) => {
   const [showAddNote, setShowAddNote] = useState(false);
   const [newNoteTitle, setNewNoteTitle] = useState("");
   const [newNoteContent, setNewNoteContent] = useState("");
   const [selectedColor, setSelectedColor] = useState(NOTE_COLORS[0]);
+  const [showMischiefTracker, setShowMischiefTracker] = useState(false);
 
   const addNote = () => {
     if (newNoteTitle.trim()) {
@@ -126,6 +134,47 @@ export const Notes: React.FC<NotesProps> = ({ notes, onUpdateNotes }) => {
           ))}
         </div>
       )}
+
+      <section className="accordion-section mischief-tracker-section">
+        <div
+          className="accordion-header"
+          onClick={() => setShowMischiefTracker(!showMischiefTracker)}
+        >
+          <h2>
+            <span className="expand-icon">
+              {showMischiefTracker ? "▼" : "▶"}
+            </span>
+            Harding's Mischief Tracker
+          </h2>
+        </div>
+        {showMischiefTracker && (
+          <div className="accordion-content">
+            <div className="mischief-tracker-content">
+              <p className="mischief-text">
+                Harding has screwed the party{" "}
+                <span className="mischief-number">{mischiefTracker}</span>{" "}
+                {mischiefTracker === 1 ? "time" : "times"}.
+              </p>
+              <div className="mischief-counter">
+                <button
+                  className="mischief-btn"
+                  onClick={() =>
+                    onUpdateMischiefTracker(Math.max(0, mischiefTracker - 1))
+                  }
+                >
+                  −
+                </button>
+                <button
+                  className="mischief-btn"
+                  onClick={() => onUpdateMischiefTracker(mischiefTracker + 1)}
+                >
+                  +
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </section>
     </div>
   );
 };

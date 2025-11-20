@@ -20,10 +20,12 @@ function App() {
   const {
     character,
     notes,
+    mischiefTracker,
     allCharacters,
     updateCharacter,
     setCharacter,
     updateNotes,
+    updateMischiefTracker,
     createCharacter,
     switchCharacter,
     deleteCharacter,
@@ -311,7 +313,12 @@ function App() {
         ) : activeView === "wild-magic" ? (
           <WildMagic />
         ) : (
-          <Notes notes={notes} onUpdateNotes={updateNotes} />
+          <Notes
+            notes={notes}
+            onUpdateNotes={updateNotes}
+            mischiefTracker={mischiefTracker}
+            onUpdateMischiefTracker={updateMischiefTracker}
+          />
         )}
       </main>
 

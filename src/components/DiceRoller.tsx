@@ -11,6 +11,8 @@ interface DiceResult {
 export const DiceRoller: React.FC = () => {
   const [results, setResults] = useState<DiceResult[]>([]);
   const [modifier, setModifier] = useState(0);
+  const [blessActive, setBlessActive] = useState(false);
+  const [guidanceActive, setGuidanceActive] = useState(false);
 
   const rollDice = (sides: number, count: number = 1) => {
     const rolls: number[] = [];
@@ -18,13 +20,37 @@ export const DiceRoller: React.FC = () => {
       rolls.push(Math.floor(Math.random() * sides) + 1);
     }
 
-    const total = rolls.reduce((sum, roll) => sum + roll, 0) + modifier;
+    // Add Bless and Guidance d4 rolls if active
+    let blessRoll = 0;
+    let guidanceRoll = 0;
+    if (blessActive) {
+      blessRoll = Math.floor(Math.random() * 4) + 1;
+    }
+    if (guidanceActive) {
+      guidanceRoll = Math.floor(Math.random() * 4) + 1;
+    }
+
+    const total =
+      rolls.reduce((sum, roll) => sum + roll, 0) +
+      modifier +
+      blessRoll +
+      guidanceRoll;
+
+    let typeString = `${count}d${sides}`;
+    if (modifier !== 0) {
+      typeString += ` ${modifier >= 0 ? "+" : ""}${modifier}`;
+    }
+    if (blessActive) {
+      typeString += ` +${blessRoll} (Bless)`;
+    }
+    if (guidanceActive) {
+      typeString += ` +${guidanceRoll} (Guidance)`;
+    }
+
     const result: DiceResult = {
       rolls,
       total,
-      type: `${count}d${sides}${
-        modifier !== 0 ? ` ${modifier >= 0 ? "+" : ""}${modifier}` : ""
-      }`,
+      type: typeString,
       modifier,
       sides,
     };
@@ -86,6 +112,25 @@ export const DiceRoller: React.FC = () => {
             onChange={(e) => setModifier(parseInt(e.target.value) || 0)}
             className="modifier-input"
           />
+        </div>
+
+        <div className="bonus-checkboxes">
+          <label className="checkbox-label">
+            <input
+              type="checkbox"
+              checked={blessActive}
+              onChange={(e) => setBlessActive(e.target.checked)}
+            />
+            <span>Bless (+1d4)</span>
+          </label>
+          <label className="checkbox-label">
+            <input
+              type="checkbox"
+              checked={guidanceActive}
+              onChange={(e) => setGuidanceActive(e.target.checked)}
+            />
+            <span>Guidance (+1d4)</span>
+          </label>
         </div>
 
         <div className="dice-buttons">
