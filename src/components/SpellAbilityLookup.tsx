@@ -43,24 +43,9 @@ export const SpellAbilityLookup: React.FC = () => {
   const [selectedSpell, setSelectedSpell] = useState<Spell | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [allSpells, setAllSpells] = useState<SearchResult[]>([]);
   const [showAllSpells, setShowAllSpells] = useState(false);
   const [expandedLevels, setExpandedLevels] = useState<Set<number>>(new Set());
   const debounceTimerRef = useRef<number | null>(null);
-
-  // Load all spells on mount
-  useEffect(() => {
-    const loadAllSpells = async () => {
-      try {
-        const response = await fetch("https://www.dnd5eapi.co/api/spells");
-        const data = await response.json();
-        setAllSpells(data.results);
-      } catch (err) {
-        console.error("Failed to load all spells:", err);
-      }
-    };
-    loadAllSpells();
-  }, []);
 
   // Debounced search
   useEffect(() => {
