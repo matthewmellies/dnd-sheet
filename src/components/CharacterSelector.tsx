@@ -93,7 +93,7 @@ export const CharacterSelector: React.FC<CharacterSelectorProps> = ({
                       onClick={(e) => handleDelete(e, char.id)}
                       title="Delete character"
                     >
-                      🗑️
+                      ✕
                     </button>
                   )}
                 </div>
