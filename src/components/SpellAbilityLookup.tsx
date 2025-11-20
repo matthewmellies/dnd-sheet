@@ -272,11 +272,17 @@ export const SpellAbilityLookup: React.FC = () => {
         <div className="spell-details">
           <div className="spell-header">
             <div>
-              <h2>{selectedSpell.name}</h2>
+              <h2>
+                {selectedSpell.name}
+                {selectedSpell.ritual && (
+                  <span className="ritual-badge" title="Ritual">
+                    R
+                  </span>
+                )}
+              </h2>
               <p className="spell-level-school">
                 {getSpellLevelText(selectedSpell.level)}{" "}
                 {selectedSpell.school.name}
-                {selectedSpell.ritual && " (ritual)"}
               </p>
             </div>
             <button

@@ -91,6 +91,7 @@ export interface Spell {
   components: string[];
   duration: string;
   description: string[];
+  ritual?: boolean;
   isPrepared?: boolean;
 }
 

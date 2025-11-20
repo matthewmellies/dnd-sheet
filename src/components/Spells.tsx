@@ -69,6 +69,7 @@ export const Spells: React.FC<SpellsProps> = ({ character, onUpdate }) => {
         components: spellDetails.components,
         duration: spellDetails.duration,
         description: spellDetails.desc,
+        ritual: spellDetails.ritual,
         isPrepared: false,
       };
 
@@ -209,7 +210,14 @@ export const Spells: React.FC<SpellsProps> = ({ character, onUpdate }) => {
                             <span className="expand-icon">
                               {isExpanded ? "▼" : "▶"}
                             </span>
-                            <h4>{spell.name}</h4>
+                            <h4>
+                              {spell.name}
+                              {spell.ritual && (
+                                <span className="ritual-badge" title="Ritual">
+                                  R
+                                </span>
+                              )}
+                            </h4>
                             <span className="spell-school">
                               ({spell.school})
                             </span>
