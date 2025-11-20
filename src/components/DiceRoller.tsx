@@ -107,7 +107,6 @@ export const DiceRoller: React.FC = () => {
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 rollCustom(e.currentTarget.value);
-                e.currentTarget.value = "";
               }
             }}
             className="custom-roll-input"
@@ -117,7 +116,6 @@ export const DiceRoller: React.FC = () => {
               const input = e.currentTarget
                 .previousElementSibling as HTMLInputElement;
               rollCustom(input.value);
-              input.value = "";
             }}
             className="btn-roll-custom"
           >

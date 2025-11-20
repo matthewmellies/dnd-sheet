@@ -1282,6 +1282,7 @@ body {
 
 .custom-roll-input {
   flex: 1;
+  min-width: 0;
   background-color: var(--card-background);
   border: 1px solid var(--border-color);
   color: var(--text-primary);
@@ -1303,7 +1304,11 @@ body {
   font-weight: bold;
   cursor: pointer;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   transition: background-color 0.2s;
+  flex-shrink: 0;
+  min-width: fit-content;
 }
 
 .btn-roll-custom:hover {
