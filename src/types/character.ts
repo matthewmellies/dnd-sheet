@@ -182,3 +182,21 @@ export interface APIRace {
     name: string;
   }>;
 }
+
+export interface Note {
+  id: string;
+  title: string;
+  content: string;
+  isExpanded: boolean;
+  color: string;
+}
+
+export interface CharacterData {
+  character: Character;
+  notes: Note[];
+}
+
+export interface CharactersStore {
+  characters: CharacterData[];
+  activeCharacterId: string | null;
+}

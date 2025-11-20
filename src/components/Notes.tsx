@@ -1,13 +1,5 @@
 import React, { useState } from "react";
-import { useLocalStorage } from "../hooks/useLocalStorage";
-
-interface Note {
-  id: string;
-  title: string;
-  content: string;
-  isExpanded: boolean;
-  color: string;
-}
+import type { Note } from "../types/character";
 
 const NOTE_COLORS = [
   "#fff59d", // yellow
@@ -18,8 +10,12 @@ const NOTE_COLORS = [
   "#f48fb1", // pink
 ];
 
-export const Notes: React.FC = () => {
-  const [notes, setNotes] = useLocalStorage<Note[]>("dnd-notes", []);
+interface NotesProps {
+  notes: Note[];
+  onUpdateNotes: (notes: Note[]) => void;
+}
+
+export const Notes: React.FC<NotesProps> = ({ notes, onUpdateNotes }) => {
   const [showAddNote, setShowAddNote] = useState(false);
   const [newNoteTitle, setNewNoteTitle] = useState("");
   const [newNoteContent, setNewNoteContent] = useState("");
@@ -34,7 +30,7 @@ export const Notes: React.FC = () => {
         isExpanded: true,
         color: selectedColor,
       };
-      setNotes([newNote, ...notes]);
+      onUpdateNotes([newNote, ...notes]);
       setNewNoteTitle("");
       setNewNoteContent("");
       setShowAddNote(false);
@@ -44,12 +40,12 @@ export const Notes: React.FC = () => {
 
   const deleteNote = (id: string) => {
     if (confirm("Are you sure you want to delete this note?")) {
-      setNotes(notes.filter((note) => note.id !== id));
+      onUpdateNotes(notes.filter((note) => note.id !== id));
     }
   };
 
   const toggleNote = (id: string) => {
-    setNotes(
+    onUpdateNotes(
       notes.map((note) =>
         note.id === id ? { ...note, isExpanded: !note.isExpanded } : note
       )
@@ -57,7 +53,7 @@ export const Notes: React.FC = () => {
   };
 
   const updateNote = (id: string, title: string, content: string) => {
-    setNotes(
+    onUpdateNotes(
       notes.map((note) => (note.id === id ? { ...note, title, content } : note))
     );
   };
