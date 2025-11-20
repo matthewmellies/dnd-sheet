@@ -117,6 +117,7 @@ export interface APISpell {
   components: string[];
   duration: string;
   desc: string[];
+  ritual?: boolean;
   higher_level?: string[];
   classes: Array<{
     index: string;
