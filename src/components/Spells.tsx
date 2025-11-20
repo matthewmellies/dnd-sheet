@@ -116,23 +116,6 @@ export const Spells: React.FC<SpellsProps> = ({ character, onUpdate }) => {
         </button>
       </div>
 
-      <section className="accordion-section">
-        <div
-          className="accordion-header"
-          onClick={() => setShowSpellSlots(!showSpellSlots)}
-        >
-          <h2>
-            <span className="expand-icon">{showSpellSlots ? "▼" : "▶"}</span>
-            Spell Slots
-          </h2>
-        </div>
-        {showSpellSlots && (
-          <div className="accordion-content">
-            <SpellSlots character={character} onUpdate={onUpdate} />
-          </div>
-        )}
-      </section>
-
       {showSearch && (
         <div className="spell-search">
           <div className="search-input-group">
@@ -166,6 +149,23 @@ export const Spells: React.FC<SpellsProps> = ({ character, onUpdate }) => {
           )}
         </div>
       )}
+
+      <section className="accordion-section">
+        <div
+          className="accordion-header"
+          onClick={() => setShowSpellSlots(!showSpellSlots)}
+        >
+          <h2>
+            <span className="expand-icon">{showSpellSlots ? "▼" : "▶"}</span>
+            Spell Slots
+          </h2>
+        </div>
+        {showSpellSlots && (
+          <div className="accordion-content">
+            <SpellSlots character={character} onUpdate={onUpdate} />
+          </div>
+        )}
+      </section>
 
       <div className="spells-list">
         {character.spells.length === 0 ? (

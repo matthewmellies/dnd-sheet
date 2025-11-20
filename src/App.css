@@ -16,6 +16,12 @@
 
 * {
   box-sizing: border-box;
+  max-width: 100%;
+}
+
+html {
+  overflow-x: hidden;
+  width: 100%;
 }
 
 body {
@@ -26,12 +32,18 @@ body {
   padding: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
 }
 
 #root {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
 }
 
 .app {
@@ -41,6 +53,7 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
 }
 
 /* Header */
@@ -199,6 +212,9 @@ body {
 .app-main {
   flex: 1;
   padding: 1rem;
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
 }
 
 /* Character Info */
@@ -208,6 +224,8 @@ body {
   border-radius: 8px;
   margin-bottom: 1rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 .info-row {
@@ -296,6 +314,7 @@ body {
   border-radius: 8px;
   overflow: hidden;
   border: 1px solid var(--border-color);
+  max-width: 100%;
 }
 
 .accordion-header {
@@ -559,6 +578,8 @@ body {
 /* Spells */
 .spells {
   margin-bottom: 1.5rem;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 .spells-header {
@@ -752,6 +773,8 @@ body {
   padding: 0.75rem;
   border-radius: 4px;
   font-size: 1rem;
+  min-width: 0;
+  width: 100%;
 }
 
 .search-loading {
@@ -983,10 +1006,14 @@ body {
   border-top: 1px solid var(--border-color);
   color: var(--text-primary);
   line-height: 1.6;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .spell-description p {
   margin: 0.5rem 0;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .spell-description p:first-child {
@@ -1000,6 +1027,8 @@ body {
 /* Equipment */
 .equipment {
   margin-bottom: 1.5rem;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 .equipment-header {
@@ -1367,6 +1396,8 @@ body {
 .monster-lookup {
   max-width: 800px;
   margin: 0 auto;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 .monster-lookup h1 {
@@ -1426,6 +1457,9 @@ body {
   border-radius: 8px;
   padding: 1.5rem;
   border: 2px solid var(--primary-color);
+  max-width: 100%;
+  overflow-x: hidden;
+  word-wrap: break-word;
 }
 
 .monster-header {
@@ -1566,6 +1600,8 @@ body {
 .spell-ability-lookup {
   max-width: 800px;
   margin: 0 auto;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 .spell-ability-lookup h1 {
@@ -1625,6 +1661,9 @@ body {
   border-radius: 8px;
   padding: 1.5rem;
   border: 2px solid var(--primary-color);
+  max-width: 100%;
+  overflow-x: hidden;
+  word-wrap: break-word;
 }
 
 .spell-header {
