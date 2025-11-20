@@ -43,7 +43,24 @@ export const SpellAbilityLookup: React.FC = () => {
   const [selectedSpell, setSelectedSpell] = useState<Spell | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [allSpells, setAllSpells] = useState<SearchResult[]>([]);
+  const [showAllSpells, setShowAllSpells] = useState(false);
+  const [expandedLevels, setExpandedLevels] = useState<Set<number>>(new Set());
   const debounceTimerRef = useRef<number | null>(null);
+
+  // Load all spells on mount
+  useEffect(() => {
+    const loadAllSpells = async () => {
+      try {
+        const response = await fetch("https://www.dnd5eapi.co/api/spells");
+        const data = await response.json();
+        setAllSpells(data.results);
+      } catch (err) {
+        console.error("Failed to load all spells:", err);
+      }
+    };
+    loadAllSpells();
+  }, []);
 
   // Debounced search
   useEffect(() => {
@@ -106,6 +123,66 @@ export const SpellAbilityLookup: React.FC = () => {
     return `${level}${suffix}-level`;
   };
 
+  const [spellsByLevel, setSpellsByLevel] = useState<{
+    [key: number]: SearchResult[];
+  }>({});
+  const [loadingLevels, setLoadingLevels] = useState(false);
+
+  // Load spell levels when All Spells section is opened
+  useEffect(() => {
+    if (showAllSpells && Object.keys(spellsByLevel).length === 0) {
+      const loadSpellLevels = async () => {
+        setLoadingLevels(true);
+        try {
+          const organized: { [key: number]: SearchResult[] } = {};
+
+          // Query spells by level (0-9)
+          const levelPromises = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(
+            async (level) => {
+              try {
+                const response = await fetch(
+                  `https://www.dnd5eapi.co/api/spells?level=${level}`
+                );
+                const data = await response.json();
+                return { level, spells: data.results || [] };
+              } catch {
+                return { level, spells: [] };
+              }
+            }
+          );
+
+          const results = await Promise.all(levelPromises);
+
+          results.forEach(({ level, spells }) => {
+            organized[level] = spells.sort((a: SearchResult, b: SearchResult) =>
+              a.name.localeCompare(b.name)
+            );
+          });
+
+          setSpellsByLevel(organized);
+        } catch (err) {
+          console.error("Failed to organize spells by level:", err);
+        } finally {
+          setLoadingLevels(false);
+        }
+      };
+
+      loadSpellLevels();
+    }
+  }, [showAllSpells, spellsByLevel]);
+
+  const toggleLevel = (level: number) => {
+    setExpandedLevels((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(level)) {
+        newSet.delete(level);
+      } else {
+        newSet.add(level);
+      }
+      return newSet;
+    });
+  };
+
   return (
     <div className="spell-ability-lookup">
       <h1>Spell & Ability Lookup</h1>
@@ -140,6 +217,70 @@ export const SpellAbilityLookup: React.FC = () => {
 
       {searchTerm.trim() && !loading && searchResults.length === 0 && (
         <div className="no-results">No spells found</div>
+      )}
+
+      {!selectedSpell && (
+        <section className="accordion-section">
+          <div
+            className="accordion-header"
+            onClick={() => setShowAllSpells(!showAllSpells)}
+          >
+            <h2>
+              <span className="expand-icon">{showAllSpells ? "▼" : "▶"}</span>
+              All Spells
+            </h2>
+          </div>
+          {showAllSpells && (
+            <div className="accordion-content all-spells-container">
+              {loadingLevels ? (
+                <div
+                  style={{
+                    padding: "2rem",
+                    textAlign: "center",
+                    color: "var(--text-secondary)",
+                  }}
+                >
+                  Loading spells...
+                </div>
+              ) : (
+                [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((level) => {
+                  const spells = spellsByLevel[level] || [];
+                  if (spells.length === 0) return null;
+
+                  return (
+                    <div key={level} className="spell-level-group">
+                      <div
+                        className="spell-level-header"
+                        onClick={() => toggleLevel(level)}
+                      >
+                        <h3>
+                          <span className="expand-icon-small">
+                            {expandedLevels.has(level) ? "▼" : "▶"}
+                          </span>
+                          {level === 0 ? "Cantrips" : `Level ${level}`} (
+                          {spells.length})
+                        </h3>
+                      </div>
+                      {expandedLevels.has(level) && (
+                        <div className="spell-list">
+                          {spells.map((spell) => (
+                            <button
+                              key={spell.index}
+                              className="spell-list-item"
+                              onClick={() => loadSpellDetails(spell.index)}
+                            >
+                              {spell.name}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })
+              )}
+            </div>
+          )}
+        </section>
       )}
 
       {selectedSpell && (
