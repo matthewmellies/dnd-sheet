@@ -2001,3 +2001,155 @@ body {
     font-size: 1.25rem;
   }
 }
+
+/* Wild Magic */
+.wild-magic {
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.wild-magic h1 {
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.wild-magic-description {
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.wild-magic-button-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.btn-wild-magic {
+  padding: 2rem 3rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+  background: linear-gradient(135deg, #9c27b0, #e91e63, #ff9800);
+  background-size: 200% 200%;
+  animation: wildMagicGradient 3s ease infinite;
+  color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes wildMagicGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.btn-wild-magic:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 6px 20px rgba(156, 39, 176, 0.5);
+}
+
+.btn-wild-magic:active {
+  transform: translateY(0) scale(1);
+}
+
+.surge-result {
+  background-color: var(--card-background);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border: 3px solid #9c27b0;
+  box-shadow: 0 0 20px rgba(156, 39, 176, 0.3);
+  animation: slideDown 0.3s ease-out;
+  max-width: 100%;
+  overflow-x: hidden;
+  word-wrap: break-word;
+}
+
+.surge-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.surge-header h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+  color: #9c27b0;
+}
+
+.surge-roll {
+  color: var(--secondary-color);
+  font-weight: bold;
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.btn-clear-surge {
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  line-height: 1;
+  transition: color 0.2s;
+  flex-shrink: 0;
+}
+
+.btn-clear-surge:hover {
+  color: var(--secondary-color);
+}
+
+.surge-text {
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin: 0;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.wild-magic-info {
+  background-color: var(--card-background);
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.wild-magic-info h3 {
+  color: var(--secondary-color);
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.wild-magic-info p {
+  color: var(--text-secondary);
+  margin: 0 0 1rem 0;
+  line-height: 1.6;
+}
+
+.wild-magic-info p:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 600px) {
+  .btn-wild-magic {
+    padding: 1.5rem 2rem;
+    font-size: 1.25rem;
+  }
+}
