@@ -14,6 +14,7 @@ import { EquipmentComponent } from "./components/Equipment";
 import { DiceRoller } from "./components/DiceRoller";
 import { MonsterLookup } from "./components/MonsterLookup";
 import { SpellAbilityLookup } from "./components/SpellAbilityLookup";
+import { CritFumble } from "./components/CritFumble";
 import "./App.css";
 
 function App() {
@@ -23,7 +24,7 @@ function App() {
   );
 
   const [activeView, setActiveView] = useState<
-    "character" | "dice" | "monsters" | "spells-lookup"
+    "character" | "dice" | "monsters" | "spells-lookup" | "crit-fumble"
   >("character");
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -150,6 +151,17 @@ function App() {
             >
               Spell Lookup
             </button>
+            <button
+              className={`menu-item ${
+                activeView === "crit-fumble" ? "active" : ""
+              }`}
+              onClick={() => {
+                setActiveView("crit-fumble");
+                setMenuOpen(false);
+              }}
+            >
+              Crit/Fumble
+            </button>
           </nav>
         </>
       )}
@@ -267,8 +279,10 @@ function App() {
           <DiceRoller />
         ) : activeView === "monsters" ? (
           <MonsterLookup />
-        ) : (
+        ) : activeView === "spells-lookup" ? (
           <SpellAbilityLookup />
+        ) : (
+          <CritFumble />
         )}
       </main>
 
