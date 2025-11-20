@@ -120,7 +120,6 @@ export const SpellSlots: React.FC<SpellSlotsProps> = ({
   return (
     <div className="spell-slots">
       <div className="spell-slots-header">
-        <h3>Spell Slots</h3>
         <button
           onClick={longRest}
           className="btn-long-rest"

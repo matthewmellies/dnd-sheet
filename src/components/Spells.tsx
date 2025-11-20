@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import type { Character, Spell } from "../types/character";
 import { useDnDAPI } from "../hooks/useDnDAPI";
 import { SpellSlots } from "./SpellSlots";
@@ -15,7 +15,9 @@ export const Spells: React.FC<SpellsProps> = ({ character, onUpdate }) => {
     Array<{ index: string; name: string }>
   >([]);
   const [expandedSpells, setExpandedSpells] = useState<Set<string>>(new Set());
+  const [showSpellSlots, setShowSpellSlots] = useState(true);
   const api = useDnDAPI();
+  const debounceTimerRef = useRef<number | null>(null);
 
   const toggleExpanded = (spellIndex: string) => {
     setExpandedSpells((prev) => {
@@ -29,12 +31,30 @@ export const Spells: React.FC<SpellsProps> = ({ character, onUpdate }) => {
     });
   };
 
-  const handleSearch = async () => {
-    if (searchTerm.trim()) {
-      const results = await api.searchSpells(searchTerm);
-      setSearchResults(results || []);
+  // Debounced search effect
+  useEffect(() => {
+    // Clear previous timer
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
     }
-  };
+
+    // Only search if there's a search term and search is visible
+    if (searchTerm.trim() && showSearch) {
+      debounceTimerRef.current = setTimeout(async () => {
+        const results = await api.searchSpells(searchTerm);
+        setSearchResults(results || []);
+      }, 500); // 500ms delay
+    } else {
+      setSearchResults([]);
+    }
+
+    // Cleanup on unmount
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+    };
+  }, [searchTerm, showSearch]);
 
   const addSpell = async (spellIndex: string) => {
     const spellDetails = await api.getSpellDetails(spellIndex);
@@ -78,16 +98,40 @@ export const Spells: React.FC<SpellsProps> = ({ character, onUpdate }) => {
     });
   };
 
+  const toggleSearch = () => {
+    if (showSearch) {
+      // Clear search when closing
+      setSearchTerm("");
+      setSearchResults([]);
+    }
+    setShowSearch(!showSearch);
+  };
+
   return (
     <div className="spells">
       <div className="spells-header">
         <h2>Spells</h2>
-        <button onClick={() => setShowSearch(!showSearch)} className="btn-add">
+        <button onClick={toggleSearch} className="btn-add">
           {showSearch ? "Cancel" : "+ Add Spell"}
         </button>
       </div>
 
-      <SpellSlots character={character} onUpdate={onUpdate} />
+      <section className="accordion-section">
+        <div
+          className="accordion-header"
+          onClick={() => setShowSpellSlots(!showSpellSlots)}
+        >
+          <h2>
+            <span className="expand-icon">{showSpellSlots ? "▼" : "▶"}</span>
+            Spell Slots
+          </h2>
+        </div>
+        {showSpellSlots && (
+          <div className="accordion-content">
+            <SpellSlots character={character} onUpdate={onUpdate} />
+          </div>
+        )}
+      </section>
 
       {showSearch && (
         <div className="spell-search">
@@ -96,12 +140,12 @@ export const Spells: React.FC<SpellsProps> = ({ character, onUpdate }) => {
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search for spells..."
-              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+              placeholder="Start typing to search spells..."
+              autoFocus
             />
-            <button onClick={handleSearch} disabled={api.loading}>
-              {api.loading ? "Searching..." : "Search"}
-            </button>
+            {api.loading && (
+              <span className="search-loading">Searching...</span>
+            )}
           </div>
 
           {api.error && <div className="error">{api.error}</div>}
@@ -115,6 +159,10 @@ export const Spells: React.FC<SpellsProps> = ({ character, onUpdate }) => {
                 </div>
               ))}
             </div>
+          )}
+
+          {searchTerm.trim() && !api.loading && searchResults.length === 0 && (
+            <div className="no-results">No spells found</div>
           )}
         </div>
       )}

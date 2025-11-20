@@ -12,6 +12,8 @@ import { CombatStats } from "./components/CombatStats";
 import { Spells } from "./components/Spells";
 import { EquipmentComponent } from "./components/Equipment";
 import { DiceRoller } from "./components/DiceRoller";
+import { MonsterLookup } from "./components/MonsterLookup";
+import { SpellAbilityLookup } from "./components/SpellAbilityLookup";
 import "./App.css";
 
 function App() {
@@ -20,9 +22,9 @@ function App() {
     createNewCharacter()
   );
 
-  const [activeView, setActiveView] = useState<"character" | "dice">(
-    "character"
-  );
+  const [activeView, setActiveView] = useState<
+    "character" | "dice" | "monsters" | "spells-lookup"
+  >("character");
   const [menuOpen, setMenuOpen] = useState(false);
 
   const [activeTab, setActiveTab] = useState<"stats" | "spells" | "equipment">(
@@ -100,6 +102,13 @@ function App() {
           <div className="menu-overlay" onClick={() => setMenuOpen(false)} />
           <nav className="side-menu">
             <button
+              className="menu-close"
+              onClick={() => setMenuOpen(false)}
+              aria-label="Close menu"
+            >
+              ✕
+            </button>
+            <button
               className={`menu-item ${
                 activeView === "character" ? "active" : ""
               }`}
@@ -118,6 +127,28 @@ function App() {
               }}
             >
               Dice Roller
+            </button>
+            <button
+              className={`menu-item ${
+                activeView === "monsters" ? "active" : ""
+              }`}
+              onClick={() => {
+                setActiveView("monsters");
+                setMenuOpen(false);
+              }}
+            >
+              Monster Lookup
+            </button>
+            <button
+              className={`menu-item ${
+                activeView === "spells-lookup" ? "active" : ""
+              }`}
+              onClick={() => {
+                setActiveView("spells-lookup");
+                setMenuOpen(false);
+              }}
+            >
+              Spell Lookup
             </button>
           </nav>
         </>
@@ -232,8 +263,12 @@ function App() {
               )}
             </div>
           </>
-        ) : (
+        ) : activeView === "dice" ? (
           <DiceRoller />
+        ) : activeView === "monsters" ? (
+          <MonsterLookup />
+        ) : (
+          <SpellAbilityLookup />
         )}
       </main>
 
