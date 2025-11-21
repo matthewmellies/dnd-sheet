@@ -35,7 +35,6 @@ const FUMBLE_EFFECTS: string[] = [
   "Butterfingers: The fumbler has disadvantage on all attack rolls, ability checks, skill checks, or saving throws they make before the end of their next turn.",
   "Self-Inflicted Wound: The fumbler rolls damage and applies it to themselves.",
   "Calamitous Flub: Roll all the attack's damage dice twice and add them together, then add any relevant modifiers as normal. The fumbler applies this damage to themselves. They then fall Unconscious until another creature rouses them, an attack hits them, or three rounds have passed, whichever happens first.",
-  "A collected skeleton key falls to the floor and shatters, disappearing in a cloud of black smoke. It appears you'll have to find it again.",
 ];
 
 // Probability that nothing special happens on a fumble (0-1 scale)
