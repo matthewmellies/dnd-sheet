@@ -1654,6 +1654,123 @@ body {
   }
 }
 
+.btn-load-all {
+  width: 100%;
+  background-color: var(--primary-color);
+  color: var(--text-primary);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  transition: background-color 0.2s;
+}
+
+.btn-load-all:hover {
+  background-color: #a00000;
+}
+
+.loading-message {
+  text-align: center;
+  color: var(--text-secondary);
+  padding: 1rem;
+  font-style: italic;
+}
+
+.monsters-by-cr {
+  margin-top: 1.5rem;
+}
+
+.monsters-by-cr h2 {
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.cr-group {
+  margin-bottom: 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  overflow: hidden;
+  background-color: var(--card-background);
+}
+
+.cr-header {
+  padding: 1rem;
+  cursor: pointer;
+  background-color: rgba(139, 0, 0, 0.2);
+  transition: background-color 0.2s;
+  user-select: none;
+}
+
+.cr-header:hover {
+  background-color: rgba(139, 0, 0, 0.3);
+}
+
+.cr-header h3 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.cr-header .expand-icon {
+  font-size: 0.875rem;
+  color: var(--secondary-color);
+  width: 16px;
+  transition: transform 0.2s;
+}
+
+.monster-count {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: normal;
+  margin-left: auto;
+}
+
+.cr-content {
+  border-top: 1px solid var(--border-color);
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.monster-cr-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.75rem 1rem;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.monster-cr-item:last-child {
+  border-bottom: none;
+}
+
+.monster-cr-item:hover {
+  background-color: rgba(139, 0, 0, 0.3);
+}
+
+.monster-name {
+  flex: 1;
+}
+
+.monster-cr {
+  color: var(--secondary-color);
+  font-size: 0.875rem;
+  font-weight: bold;
+  margin-left: 1rem;
+}
+
 /* Spell & Ability Lookup */
 .spell-ability-lookup {
   max-width: 800px;

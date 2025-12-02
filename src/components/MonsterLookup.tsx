@@ -47,6 +47,9 @@ export const MonsterLookup: React.FC = () => {
   const [selectedMonster, setSelectedMonster] = useState<Monster | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [expandedCR, setExpandedCR] = useState<Set<string>>(new Set());
+  const [allMonsters, setAllMonsters] = useState<Monster[]>([]);
+  const [loadingAll, setLoadingAll] = useState(false);
   const debounceTimerRef = useRef<number | null>(null);
 
   const calculateModifier = (score: number): string => {
@@ -108,6 +111,76 @@ export const MonsterLookup: React.FC = () => {
     }
   };
 
+  const loadAllMonsters = async () => {
+    setLoadingAll(true);
+    setError(null);
+    try {
+      const response = await fetch("https://www.dnd5eapi.co/api/monsters");
+      const data = await response.json();
+
+      // Load monsters in batches to avoid overwhelming the API
+      const batchSize = 20;
+      const monsters: Monster[] = [];
+
+      for (let i = 0; i < data.results.length; i += batchSize) {
+        const batch = data.results.slice(i, i + batchSize);
+        const batchPromises = batch.map((monster: MonsterSearchResult) =>
+          fetch(`https://www.dnd5eapi.co/api/monsters/${monster.index}`)
+            .then((res) => res.json())
+            .catch((err) => {
+              console.error(`Failed to load ${monster.name}:`, err);
+              return null;
+            })
+        );
+
+        const batchResults = await Promise.all(batchPromises);
+        monsters.push(...batchResults.filter((m): m is Monster => m !== null));
+
+        // Small delay between batches to be nice to the API
+        if (i + batchSize < data.results.length) {
+          await new Promise((resolve) => setTimeout(resolve, 100));
+        }
+      }
+
+      setAllMonsters(monsters);
+    } catch (err) {
+      setError("Failed to load monsters");
+      console.error(err);
+    } finally {
+      setLoadingAll(false);
+    }
+  };
+
+  const toggleCR = (crRange: string) => {
+    setExpandedCR((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(crRange)) {
+        newSet.delete(crRange);
+      } else {
+        newSet.add(crRange);
+      }
+      return newSet;
+    });
+  };
+
+  const getCRRanges = () => {
+    const ranges = ["0-1"];
+    for (let i = 1; i <= 30; i++) {
+      ranges.push(`${i}-${i + 1}`);
+    }
+    return ranges;
+  };
+
+  const getMonstersByCRRange = (range: string): Monster[] => {
+    if (range === "0-1") {
+      return allMonsters.filter((m) => m.challenge_rating < 1);
+    }
+    const [min, max] = range.split("-").map(Number);
+    return allMonsters.filter(
+      (m) => m.challenge_rating >= min && m.challenge_rating < max
+    );
+  };
+
   return (
     <div className="monster-lookup">
       <h1>Monster Lookup</h1>
@@ -126,6 +199,16 @@ export const MonsterLookup: React.FC = () => {
 
       {error && <div className="error">{error}</div>}
 
+      {allMonsters.length === 0 && !loadingAll && (
+        <button onClick={loadAllMonsters} className="btn-load-all">
+          Browse All Monsters by CR
+        </button>
+      )}
+
+      {loadingAll && (
+        <div className="loading-message">Loading all monsters...</div>
+      )}
+
       {searchResults.length > 0 && (
         <div className="monster-search-results">
           {searchResults.map((result) => (
@@ -142,6 +225,52 @@ export const MonsterLookup: React.FC = () => {
 
       {searchTerm.trim() && !loading && searchResults.length === 0 && (
         <div className="no-results">No monsters found</div>
+      )}
+
+      {allMonsters.length > 0 && !selectedMonster && (
+        <div className="monsters-by-cr">
+          <h2>Monsters by Challenge Rating</h2>
+          {getCRRanges().map((range) => {
+            const monstersInRange = getMonstersByCRRange(range);
+            if (monstersInRange.length === 0) return null;
+
+            const isExpanded = expandedCR.has(range);
+            const label =
+              range === "0-1" ? "CR 0-1 (Less than 1)" : `CR ${range}`;
+
+            return (
+              <div key={range} className="cr-group">
+                <div className="cr-header" onClick={() => toggleCR(range)}>
+                  <h3>
+                    <span className="expand-icon">
+                      {isExpanded ? "▼" : "▶"}
+                    </span>
+                    {label}
+                    <span className="monster-count">
+                      ({monstersInRange.length})
+                    </span>
+                  </h3>
+                </div>
+                {isExpanded && (
+                  <div className="cr-content">
+                    {monstersInRange.map((monster) => (
+                      <button
+                        key={monster.index}
+                        className="monster-cr-item"
+                        onClick={() => setSelectedMonster(monster)}
+                      >
+                        <span className="monster-name">{monster.name}</span>
+                        <span className="monster-cr">
+                          CR {monster.challenge_rating}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
       )}
 
       {selectedMonster && (
