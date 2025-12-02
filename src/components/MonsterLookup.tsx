@@ -296,7 +296,9 @@ export const MonsterLookup: React.FC = () => {
                       >
                         <div className="monster-info-line">
                           <span className="monster-name">{monster.name}</span>
-                          <span className="monster-type-label">{monster.type}</span>
+                          <span className="monster-type-label">
+                            {monster.type}
+                          </span>
                         </div>
                         <span className="monster-cr">
                           CR {monster.challenge_rating}
