@@ -190,18 +190,27 @@ export const MonsterLookup: React.FC = () => {
   const getCRRanges = () => {
     const ranges = ["0-1"];
     for (let i = 1; i <= 30; i++) {
-      ranges.push(`${i}-${i + 1}`);
+      ranges.push(`${i}`);
     }
     return ranges;
+  };
+
+  const getCRLabel = (range: string): string => {
+    if (range === "0-1") {
+      return "CR 0-1 (Less than 1)";
+    }
+    const cr = Number(range);
+    return `CR ${cr}`;
   };
 
   const getMonstersByCRRange = (range: string): Monster[] => {
     if (range === "0-1") {
       return allMonsters.filter((m) => m.challenge_rating < 1);
     }
-    const [min, max] = range.split("-").map(Number);
+    const cr = Number(range);
+    // For whole numbers, include the exact CR and any fractional values up to the next whole number
     return allMonsters.filter(
-      (m) => m.challenge_rating >= min && m.challenge_rating < max
+      (m) => m.challenge_rating >= cr && m.challenge_rating < cr + 1
     );
   };
 
@@ -262,8 +271,7 @@ export const MonsterLookup: React.FC = () => {
             if (monstersInRange.length === 0) return null;
 
             const isExpanded = expandedCR.has(range);
-            const label =
-              range === "0-1" ? "CR 0-1 (Less than 1)" : `CR ${range}`;
+            const label = getCRLabel(range);
 
             return (
               <div key={range} className="cr-group">
@@ -286,7 +294,10 @@ export const MonsterLookup: React.FC = () => {
                         className="monster-cr-item"
                         onClick={() => setSelectedMonster(monster)}
                       >
-                        <span className="monster-name">{monster.name}</span>
+                        <div className="monster-info-line">
+                          <span className="monster-name">{monster.name}</span>
+                          <span className="monster-type-label">{monster.type}</span>
+                        </div>
                         <span className="monster-cr">
                           CR {monster.challenge_rating}
                         </span>

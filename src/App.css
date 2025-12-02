@@ -1779,8 +1779,22 @@ body {
   background-color: rgba(139, 0, 0, 0.3);
 }
 
-.monster-name {
+.monster-info-line {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
   flex: 1;
+}
+
+.monster-name {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.monster-type-label {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  text-transform: capitalize;
 }
 
 .monster-cr {
