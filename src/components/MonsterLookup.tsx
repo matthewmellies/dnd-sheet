@@ -119,26 +119,50 @@ export const MonsterLookup: React.FC = () => {
       const data = await response.json();
 
       // Load monsters in batches to avoid overwhelming the API
-      const batchSize = 20;
+      const batchSize = 10;
       const monsters: Monster[] = [];
 
       for (let i = 0; i < data.results.length; i += batchSize) {
         const batch = data.results.slice(i, i + batchSize);
-        const batchPromises = batch.map((monster: MonsterSearchResult) =>
-          fetch(`https://www.dnd5eapi.co/api/monsters/${monster.index}`)
-            .then((res) => res.json())
-            .catch((err) => {
-              console.error(`Failed to load ${monster.name}:`, err);
+        const batchPromises = batch.map(
+          async (monster: MonsterSearchResult) => {
+            try {
+              const res = await fetch(
+                `https://www.dnd5eapi.co/api/monsters/${monster.index}`
+              );
+
+              // Check if response is OK
+              if (!res.ok) {
+                console.warn(
+                  `Failed to load ${monster.name}: HTTP ${res.status}`
+                );
+                return null;
+              }
+
+              // Check content type
+              const contentType = res.headers.get("content-type");
+              if (!contentType || !contentType.includes("application/json")) {
+                console.warn(
+                  `Failed to load ${monster.name}: Invalid content type`
+                );
+                return null;
+              }
+
+              const json = await res.json();
+              return json;
+            } catch (err) {
+              console.warn(`Failed to load ${monster.name}:`, err);
               return null;
-            })
+            }
+          }
         );
 
         const batchResults = await Promise.all(batchPromises);
         monsters.push(...batchResults.filter((m): m is Monster => m !== null));
 
-        // Small delay between batches to be nice to the API
+        // Delay between batches
         if (i + batchSize < data.results.length) {
-          await new Promise((resolve) => setTimeout(resolve, 100));
+          await new Promise((resolve) => setTimeout(resolve, 200));
         }
       }
 
@@ -206,7 +230,10 @@ export const MonsterLookup: React.FC = () => {
       )}
 
       {loadingAll && (
-        <div className="loading-message">Loading all monsters...</div>
+        <div className="loading-message">
+          <div className="loading-spinner"></div>
+          <span>Loading all monsters...</span>
+        </div>
       )}
 
       {searchResults.length > 0 && (
